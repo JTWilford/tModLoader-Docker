@@ -1,0 +1,32 @@
+version: '3.5'
+services:
+  tmodloader:
+    image: jwilford/tmodloader-server
+    volumes:
+      - terraria:/var/lib/terraria/
+    ports:
+      - 7777:7777
+    networks:
+      - proxy
+    stdin_open: true
+    tty: true
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      #restart_policy:
+        #condition: on-failure
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        #- com.df.httpsOnly=true
+        - com.df.port=80
+        - com.df.serviceDomain=terraria.cbgg.men
+        - com.df.sslVerifyNone=true
+networks:
+  proxy:
+    external: true
+volumes:
+  terraria:
+    external: true
